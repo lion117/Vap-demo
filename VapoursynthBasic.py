@@ -26,11 +26,11 @@ class MainRun():
     _curDir = os.getcwd()
     _tarDir = os.path.dirname(os.path.dirname(_curDir))
     _img = os.path.join(_tarDir, u"ShareMedia/Images/girl720p.png")
-    _video = core.ffms2.Source(source=r"e:\\media\\stand.mp4")
-    _vFile  = r"e:\\media\\stand.mp4"
+    # _video = core.ffms2.Source(source=r"e:\\media\\stand.mp4")
+    # _vFile  = r"e:\\media\\stand.mp4"
     # _vFile1  = r"E:\media\noisy\dance82_output_0.mp4"
     _vFile1  = r"E:\media\noisy\noisy_files\pc3\1-1001.mp4"
-    _noiseFile  = r"E:\media\noisy\image\src-noise-4-1.jpg"
+    _noiseFile  = os.path.join(os.getcwd(),"image/my.bmp")
 
     @classmethod
     def runTest(cls):
@@ -42,8 +42,8 @@ class MainRun():
 
     @classmethod
     def runConvertRGB24(cls):
-        video = core.std.Transpose(cls._video)
-        video.set_output()
+        # video = core.std.Transpose(cls._video)
+        # video.set_output()
         enable_v210 = True
 
 
@@ -70,9 +70,7 @@ class MainRun():
         lVSrc = core.text.Text(lVSrc, ["src"])
         flt = core.text.Text(flt, ["dst"])
         dst = core.std.StackHorizontal((lVSrc, flt))
-        # dst.set_output()
-        with open("vsraw5.yuv","wb") as rawfile:
-            dst.output(rawfile)
+        dst.set_output()
         enable_v210 = True
         gLogger.info(type(lVSrc))
 
@@ -141,7 +139,7 @@ class MainRun():
         import havsfunc
         lVSrc = core.ffms2.Source(source=cls._noiseFile)
         flt = mvf.ToRGB(lVSrc,depth=8)
-        # flt = havsfunc.SMDegrain(lVSrc,tr=2,thSAD=250,contrasharp=True,RefineMotion=True)
+        flt = havsfunc.SMDegrain(lVSrc,tr=2,thSAD=250,contrasharp=True,RefineMotion=True)
 
         gLogger.info(flt)
         gLogger.info(lVSrc)
@@ -180,7 +178,7 @@ if __name__ == "__vapoursynth__":
     # MainRun.runKNLMeansCLDenoisy()
     # MainRun.runKNLMeansCLDenoisyImage()
     # MainRun.runDiffDenoisyImage()
-    MainRun.runRGBDenoise()
+    MainRun.runKNLMeansCLDenoisyImage()
 
 else:
     # MainRun.runTest()
@@ -192,4 +190,4 @@ else:
     # MainRun.runKNLMeansCLDenoisy()
     # MainRun.runDiffDenoisyImage()
     # MainRun.runRGBDenoise()
-    MainRun.runSMDenoise()
+    MainRun.runKNLMeansCLDenoisyImage()
